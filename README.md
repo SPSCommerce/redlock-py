@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/SPSCommerce/redlock-py/badge.png)](https://coveralls.io/r/SPSCommerce/redlock-py)
+
 redlock-py - Redis distributed locks in Python
 
 This python lib implements the Redis-based distributed lock manager algorithm [described in this blog post](http://antirez.com/news/77).
