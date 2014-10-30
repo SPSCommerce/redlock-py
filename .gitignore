@@ -1,2 +1,4 @@
 .coverage
 .DS_Store
+redlock_py.egg-info
+dist
