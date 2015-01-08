@@ -65,7 +65,7 @@ THE SOFTWARE.
 
 setup(
     name='redlock-py',
-    version='1.0.1',
+    version='1.0.2',
     license='MIT',
     packages=find_packages(),
     include_package_data=True,

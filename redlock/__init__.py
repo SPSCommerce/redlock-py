@@ -25,7 +25,10 @@ class Redlock(object):
         self.servers = []
         for connection_info in connection_list:
             try:
-                server = redis.StrictRedis(**connection_info)
+                if isinstance(connection_info, basestring):
+                    server = redis.StrictRedis.from_url(connection_info)
+                else:
+                    server = redis.StrictRedis(**connection_info)
                 self.servers.append(server)
             except Exception as e:
                 raise Warning(str(e))
@@ -69,7 +72,6 @@ class Redlock(object):
                     self.unlock_instance(server, resource, val)
                 retry += 1
                 time.sleep(self.retry_delay)
-
         return False
 
     def unlock(self, lock):
