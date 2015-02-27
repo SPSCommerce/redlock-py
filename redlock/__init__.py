@@ -38,7 +38,7 @@ class Redlock(object):
 
     def lock_instance(self, server, resource, val, ttl):
         try:
-            return server.set(resource, val, nx=True, ex=ttl)
+            return server.set(resource, val, nx=True, px=ttl)
         except:
             return False
 
@@ -64,7 +64,7 @@ class Redlock(object):
             drift = (ttl * self.clock_drift_factor) + 2
             now_time = datetime.utcnow()
             elapsed_time_minus_drift = ((now_time - start_time) - timedelta(milliseconds=drift)).total_seconds() * 1000
-            validity = elapsed_time_minus_drift < ttl
+            validity = ttl - elapsed_time_minus_drift
             if validity > 0 and n >= self.quorum:
                 return Lock(validity, resource, val)
             else:
