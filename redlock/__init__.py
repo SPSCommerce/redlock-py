@@ -1,5 +1,4 @@
 import redis
-from datetime import datetime, timedelta
 import string
 import random
 import time
@@ -55,16 +54,20 @@ class Redlock(object):
     def lock(self, resource, ttl):
         retry = 0
         val = self.get_unique_id()
+
+        # Add 2 milliseconds to the drift to account for Redis expires
+        # precision, which is 1 millisecond, plus 1 millisecond min
+        # drift for small TTLs.
+        drift = int(ttl * self.clock_drift_factor) + 2
+
         while retry < self.retry_count:
             n = 0
-            start_time = datetime.utcnow()
+            start_time = int(time.time() * 1000)
             for server in self.servers:
                 if self.lock_instance(server, resource, val, ttl):
                     n += 1
-            drift = (ttl * self.clock_drift_factor) + 2
-            now_time = datetime.utcnow()
-            elapsed_time_minus_drift = ((now_time - start_time) - timedelta(milliseconds=drift)).total_seconds() * 1000
-            validity = ttl - elapsed_time_minus_drift
+            elapsed_time = int(time.time() * 1000) - start_time
+            validity = int(ttl - elapsed_time - drift)
             if validity > 0 and n >= self.quorum:
                 return Lock(validity, resource, val)
             else:
@@ -77,4 +80,3 @@ class Redlock(object):
     def unlock(self, lock):
         for server in self.servers:
             self.unlock_instance(server, lock.resource, lock.key)
-
