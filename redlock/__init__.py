@@ -8,6 +8,10 @@ from collections import namedtuple
 Lock = namedtuple("Lock", ("validity", "resource", "key"))
 
 
+class CannotObtainLock(Exception):
+    pass
+
+
 class Redlock(object):
 
     default_retry_count = 3
@@ -31,7 +35,11 @@ class Redlock(object):
                 self.servers.append(server)
             except Exception as e:
                 raise Warning(str(e))
-        self.quorum = (len(self.servers) / 2) + 1
+        self.quorum = (len(self.connection_list) / 2) + 1
+
+        if len(self.servers) < self.quorum:
+            raise CannotObtainLock(
+                "Failed to connect to the majority of redis servers")
         self.retry_count = retry_count or self.default_retry_count
         self.retry_delay = retry_delay or self.default_retry_delay
 
