@@ -1,1 +1,2 @@
-recursive-include redlock *
+include LICENSE.txt
+recursive-include tests *.py
