@@ -1,4 +1,5 @@
 import unittest
+
 from redlock import Redlock
 
 
@@ -23,7 +24,3 @@ class TestRedlock(unittest.TestCase):
     def test_bad_connection_info(self):
         with self.assertRaises(Warning):
             Redlock([{"cat": "hog"}])
-
-
-
-

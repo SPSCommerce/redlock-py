@@ -1,8 +1,9 @@
-import redis
 import string
 import random
 import time
 from collections import namedtuple
+
+import redis
 
 # Python 3 compatibility
 string_type = getattr(__builtins__, 'basestring', str)

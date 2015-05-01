@@ -20,7 +20,6 @@ def lock(name, validity, redis, retry_count=3, retry_delay=200, **kwargs):
         is_blocking = False
 
     while True:
-        err = None
         try:
             dlm = redlock.Redlock(redis, retry_count=retry_count+1, retry_delay=retry_delay / 1000.0)
             lock = dlm.lock(name, validity)
