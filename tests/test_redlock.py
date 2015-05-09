@@ -9,7 +9,7 @@ class TestRedlock(unittest.TestCase):
 
     def test_lock(self):
         lock = self.redlock.lock("pants", 100)
-        self.assertEquals(lock.resource, "pants")
+        self.assertEqual(lock.resource, "pants")
         self.redlock.unlock(lock)
         lock = self.redlock.lock("pants", 10)
         self.redlock.unlock(lock)

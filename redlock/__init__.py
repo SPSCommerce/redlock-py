@@ -5,6 +5,12 @@ import time
 from collections import namedtuple
 
 
+try:
+    basestring
+except NameError:
+    basestring = str
+
+
 Lock = namedtuple("Lock", ("validity", "resource", "key"))
 
 
@@ -35,7 +41,7 @@ class Redlock(object):
                 self.servers.append(server)
             except Exception as e:
                 raise Warning(str(e))
-        self.quorum = (len(connection_list) / 2) + 1
+        self.quorum = (len(connection_list) // 2) + 1
 
         if len(self.servers) < self.quorum:
             raise CannotObtainLock(
