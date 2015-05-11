@@ -2,3 +2,4 @@
 .DS_Store
 redlock_py.egg-info
 dist
+__pycache__
