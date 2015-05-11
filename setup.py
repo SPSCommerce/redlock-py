@@ -1,15 +1,15 @@
 import os
+
 from setuptools import setup, find_packages
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
-REQUIREMENTS = ["redis"]
-
 README = """
 redlock-py - Redis distributed locks in Python
 
-This python lib implements the Redis-based distributed lock manager algorithm [described in this blog post](http://antirez.com/news/77).
+This python lib implements the Redis-based distributed lock manager algorithm
+[described in this blog post](http://antirez.com/news/77).
 
 To create a lock manager:
 
@@ -37,7 +37,9 @@ It is possible to setup the number of retries (by default 3) and the retry
 delay (by default 200 milliseconds) used to acquire the lock.
 
 
-**Disclaimer**: This code implements an algorithm which is currently a proposal, it was not formally analyzed. Make sure to understand how it works before using it in your production environments.
+**Disclaimer**: This code implements an algorithm which is currently a proposal,
+it was not formally analyzed. Make sure to understand how it works before using it
+in your production environments.
 
 The MIT License (MIT)
 
@@ -66,18 +68,28 @@ THE SOFTWARE.
 setup(
     name='redlock-py',
     version='1.0.4',
-    license='MIT',
     packages=find_packages(),
     include_package_data=True,
     description='Redis locking mechanism',
     long_description=README,
     url='https://github.com/SPSCommerce/identity-service',
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4'
+    ],
     author='pjdecoursey@spscommerce.com',
     author_email='webapps@spscommerce.com',
-    install_requires=REQUIREMENTS,
-    entry_points = {
+    install_requires=["redis"],
+    entry_points={
         'console_scripts': [
             'redlock = redlock.cli:main',
         ],
-    },
+    }
 )

@@ -1,9 +1,12 @@
-import redis
 import string
 import random
 import time
 from collections import namedtuple
 
+import redis
+
+# Python 3 compatibility
+string_type = getattr(__builtins__, 'basestring', str)
 
 Lock = namedtuple("Lock", ("validity", "resource", "key"))
 
@@ -28,7 +31,7 @@ class Redlock(object):
         self.servers = []
         for connection_info in connection_list:
             try:
-                if isinstance(connection_info, basestring):
+                if isinstance(connection_info, string_type):
                     server = redis.StrictRedis.from_url(connection_info)
                 else:
                     server = redis.StrictRedis(**connection_info)
