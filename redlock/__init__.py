@@ -66,7 +66,7 @@ class Redlock(object):
 
     def get_unique_id(self):
         CHARACTERS = string.ascii_letters + string.digits
-        return ''.join(random.choice(CHARACTERS) for _ in range(22))
+        return ''.join(random.choice(CHARACTERS) for _ in range(22)).encode()
 
     def lock(self, resource, ttl):
         retry = 0
