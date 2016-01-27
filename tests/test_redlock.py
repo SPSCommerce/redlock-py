@@ -24,3 +24,9 @@ class TestRedlock(unittest.TestCase):
     def test_bad_connection_info(self):
         with self.assertRaises(Warning):
             Redlock([{"cat": "hog"}])
+
+    def test_py3_compatible_encoding(self):
+        lock = self.redlock.lock("pants", 1000)
+        key = self.redlock.servers[0].get("pants")
+        self.assertEquals(lock.key, key)
+
