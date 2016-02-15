@@ -2,7 +2,7 @@
 
 redlock-py - Redis distributed locks in Python
 
-This python lib implements the Redis-based distributed lock manager algorithm [described in this blog post](http://antirez.com/news/77).
+This python lib implements the Redis-based distributed lock manager algorithm [described in this blog post](http://redis.io/topics/distlock).
 
 To create a lock manager:
 
@@ -31,3 +31,9 @@ delay (by default 200 milliseconds) used to acquire the lock.
 
 
 **Disclaimer**: This code implements an algorithm which is currently a proposal, it was not formally analyzed. Make sure to understand how it works before using it in your production environments.
+
+Further Reading:
+http://redis.io/topics/distlock
+http://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html
+http://antirez.com/news/101
+https://medium.com/@talentdeficit/redlock-unsafe-at-any-time-40ceac109dbb#.uj9ffh96x
