@@ -10,10 +10,14 @@ To create a lock manager:
 
 To acquire a lock:
 
-    my_lock = dlm.lock("my_resource_name",1000)
+    my_lock, errors = dlm.lock("my_resource_name",1000)
 
 Where the resource name is an unique identifier of what you are trying to lock
-and 1000 is the number of milliseconds for the validity time.
+and 1000 is the number of milliseconds for the validity time. The second return
+value errors is list of `redis-py.exceptions.RedisError` objects, each of which
+corresponds to an exception raised when interacting with a redis master. If it's
+an empty list, then there is no error. If it's not empty, then there is a problem when
+communicating with some redis masters.
 
 The returned value is `False` if the lock was not acquired (you may try again),
 otherwise an namedtuple representing the lock is returned, having three fields:
@@ -27,7 +31,13 @@ To release a lock:
     dlm.unlock(my_lock)
 
 It is possible to setup the number of retries (by default 3) and the retry
-delay (by default 200 milliseconds) used to acquire the lock. 
+delay (by default 200 milliseconds) used to acquire the lock.
+
+
+In both `dlm.lock` and `dlm.unlock` calls, a `MultipleRedlockException` object will be raised
+if there are errors when communicating with one or more redis masters. The caller of `dlm`
+should use a try-catch-finally block to handle this exception. A `MultipleRedlockException`
+object encapsulates multiple `redis-py.exceptions.RedisError` objects.
 
 
 **Disclaimer**: This code implements an algorithm which is currently a proposal, it was not formally analyzed. Make sure to understand how it works before using it in your production environments.
