@@ -39,6 +39,8 @@ class Redlock(object):
             try:
                 if isinstance(connection_info, string_type):
                     server = redis.StrictRedis.from_url(connection_info)
+                elif issubclass(type(connection_info), redis.StrictRedis):
+                    server = connection_info
                 else:
                     server = redis.StrictRedis(**connection_info)
                 self.servers.append(server)
