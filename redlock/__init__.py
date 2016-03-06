@@ -92,7 +92,7 @@ class Redlock(object):
         while retry < self.retry_count:
             n = 0
             start_time = int(time.time() * 1000)
-            redis_errors.clear()
+            del redis_errors[:]
             for server in self.servers:
                 try:
                     if self.lock_instance(server, resource, val, ttl):
