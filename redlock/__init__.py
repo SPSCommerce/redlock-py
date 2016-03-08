@@ -1,3 +1,4 @@
+import logging
 import string
 import random
 import time
@@ -39,10 +40,10 @@ class Redlock(object):
             try:
                 if isinstance(connection_info, string_type):
                     server = redis.StrictRedis.from_url(connection_info)
-                elif issubclass(type(connection_info), redis.StrictRedis):
-                    server = connection_info
-                else:
+                elif type(connection_info) == dict:
                     server = redis.StrictRedis(**connection_info)
+                else:
+                    server = connection_info
                 self.servers.append(server)
             except Exception as e:
                 raise Warning(str(e))
@@ -57,14 +58,15 @@ class Redlock(object):
     def lock_instance(self, server, resource, val, ttl):
         try:
             return server.set(resource, val, nx=True, px=ttl)
-        except:
+        except Exception as e:
+            logging.exception("Error locking resource %s in server %s", resource, str(server))
             return False
 
     def unlock_instance(self, server, resource, val):
         try:
             server.eval(self.unlock_script, 1, resource, val)
-        except:
-            pass
+        except Exception as e:
+            logging.exception("Error unlocking resource %s in server %s", resource, str(server))
 
     def get_unique_id(self):
         CHARACTERS = string.ascii_letters + string.digits
