@@ -27,7 +27,12 @@ To release a lock:
     dlm.unlock(my_lock)
 
 It is possible to setup the number of retries (by default 3) and the retry
-delay (by default 200 milliseconds) used to acquire the lock. 
+delay (by default 200 milliseconds) used to acquire the lock.
+
+
+Both `dlm.lock` and `dlm.unlock` raise a exception `MultipleRedlockException` if there are errors when communicating with one or more redis masters. The caller of `dlm` should
+use a try-catch-finally block to handle this exception. A `MultipleRedlockException` object
+encapsulates multiple `redis-py.exceptions.RedisError` objects.
 
 
 **Disclaimer**: This code implements an algorithm which is currently a proposal, it was not formally analyzed. Make sure to understand how it works before using it in your production environments.
